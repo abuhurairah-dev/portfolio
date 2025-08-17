@@ -171,7 +171,7 @@ export default function Home() {
           </div>
         </main>
 
-        {/* Bottom Icons Section */}
+        {/* Bottom Icons Section  */}
         <footer className="p-8">
           <div className="flex justify-center items-center gap-6 md:gap-8 flex-wrap">
             {/* Heart Icon */}
