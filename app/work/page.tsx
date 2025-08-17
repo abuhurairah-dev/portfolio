@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import NewNavigation from '../../components/NewNavigation';
+import { useEffect, useState } from 'react';
+import NavBar from '../../components/NavBar';
+import { useTheme } from '../../hooks/useTheme'; // ✅ shared theme hook
 
-// Pre-defined particle positions and animations to avoid hydration errors
 const particleData = [
   { left: '10%', top: '20%', delay: '0.1s', duration: '3.5s' },
   { left: '25%', top: '45%', delay: '0.3s', duration: '4.2s' },
@@ -95,10 +95,9 @@ const projects: Project[] = [
 ];
 
 export default function Work() {
-  const [isDarkMode, setIsDarkMode] = useState(true);
+  const { isDarkMode, toggleTheme, isLoaded } = useTheme(); // ✅ use shared hook
   const [selectedCategory, setSelectedCategory] = useState('All');
 
-  // Animated background gradient effect
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       const { clientX, clientY } = e;
@@ -118,16 +117,24 @@ export default function Work() {
     ? projects 
     : projects.filter(project => project.category === selectedCategory);
 
+  if (!isLoaded) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white">
+        Loading...
+      </div>
+    );
+  }
+
   return (
     <div className={`min-h-screen relative overflow-hidden transition-all duration-1000 ${
       isDarkMode 
         ? 'bg-gradient-to-br from-gray-900 via-blue-900/20 to-black' 
         : 'bg-gradient-to-br from-blue-50 via-white to-blue-100'
     }`}>
-      {/* New Navigation Bar */}
-      <NewNavigation isDarkMode={isDarkMode} onToggleTheme={() => setIsDarkMode(!isDarkMode)} />
+      {/* ✅ pass theme props */}
+      <NavBar isDarkMode={isDarkMode} onToggleTheme={toggleTheme} />
 
-      {/* Animated background gradient */}
+      {/* Mouse-based radial background */}
       <div className={`absolute inset-0 transition-all duration-1000 ${
         isDarkMode 
           ? 'bg-gradient-radial from-blue-500/10 via-transparent to-transparent' 
@@ -137,15 +144,15 @@ export default function Work() {
         backgroundPosition: 'var(--mouse-x, 50%) var(--mouse-y, 50%)',
         backgroundSize: '800px 800px'
       }} />
-      
-      {/* Noise texture overlay */}
+
+      {/* Noise overlay */}
       <div className="absolute inset-0 opacity-30 mix-blend-overlay">
         <div className="w-full h-full" style={{
           backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
         }} />
       </div>
 
-      {/* Floating particles effect */}
+      {/* Floating particles */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {particleData.map((particle, i) => (
           <div
@@ -163,11 +170,11 @@ export default function Work() {
         ))}
       </div>
 
-      {/* Main content */}
+      {/* Content */}
       <div className="relative z-10 min-h-screen flex flex-col pt-16">
         <main className="flex-1 px-6 py-12">
           <div className="max-w-7xl mx-auto">
-            {/* Hero Section */}
+            {/* Title + subtitle */}
             <div className="text-center mb-16">
               <h1 className={`text-5xl md:text-7xl font-bold mb-6 leading-tight transition-all duration-500 ${
                 isDarkMode ? 'text-white' : 'text-gray-900'
@@ -181,7 +188,7 @@ export default function Work() {
               </p>
             </div>
 
-            {/* Category Filter */}
+            {/* Category filter */}
             <div className="flex justify-center mb-12">
               <div className={`flex flex-wrap gap-2 p-2 rounded-2xl ${
                 isDarkMode 
@@ -208,7 +215,7 @@ export default function Work() {
               </div>
             </div>
 
-            {/* Projects Grid */}
+            {/* Projects grid */}
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {filteredProjects.map((project) => (
                 <div
@@ -219,10 +226,8 @@ export default function Work() {
                       : 'bg-white/50 backdrop-blur-sm border border-gray-200 hover:bg-white/70'
                   }`}
                 >
-                  {/* Project Image */}
                   <div className="text-6xl mb-4 text-center">{project.image}</div>
-                  
-                  {/* Project Info */}
+
                   <div className="space-y-4">
                     <div>
                       <h3 className={`text-xl font-bold mb-2 ${
@@ -243,7 +248,6 @@ export default function Work() {
                       {project.description}
                     </p>
                     
-                    {/* Technologies */}
                     <div className="flex flex-wrap gap-2">
                       {project.technologies.map((tech) => (
                         <span
@@ -258,8 +262,7 @@ export default function Work() {
                         </span>
                       ))}
                     </div>
-                    
-                    {/* View Project Button */}
+
                     <button className={`w-full mt-4 py-2 rounded-lg font-medium transition-all duration-300 ${
                       isDarkMode
                         ? 'bg-white/10 text-white hover:bg-white/20'

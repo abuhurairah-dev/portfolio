@@ -1,9 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import NewNavigation from '../../components/NewNavigation';
+import clsx from 'clsx';
+import NavBar from '../../components/NavBar';
+import { useTheme } from '../../hooks/useTheme';
 
-// Pre-defined particle positions and animations to avoid hydration errors
 const particleData = [
   { left: '10%', top: '20%', delay: '0.1s', duration: '3.5s' },
   { left: '25%', top: '45%', delay: '0.3s', duration: '4.2s' },
@@ -27,22 +28,54 @@ const particleData = [
   { left: '10%', top: '90%', delay: '3.9s', duration: '3.8s' },
 ];
 
+function NoiseOverlay() {
+  return (
+    <div className="absolute inset-0 opacity-30 mix-blend-overlay">
+      <div
+        className="w-full h-full"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+        }}
+      />
+    </div>
+  );
+}
+
+function FloatingParticles({ isDarkMode }: { isDarkMode: boolean }) {
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {particleData.map((p, i) => (
+        <div
+          key={i}
+          className={clsx(
+            'absolute w-1 h-1 rounded-full animate-float',
+            isDarkMode ? 'bg-blue-400/30' : 'bg-blue-600/20'
+          )}
+          style={{
+            left: p.left,
+            top: p.top,
+            animationDelay: p.delay,
+            animationDuration: p.duration,
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
 export default function Contact() {
-  const [isDarkMode, setIsDarkMode] = useState(true);
+  const { isDarkMode, toggleTheme, isLoaded } = useTheme();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     subject: '',
-    message: ''
+    message: '',
   });
 
-  // Animated background gradient effect
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      const { clientX, clientY } = e;
-      const x = (clientX / window.innerWidth) * 100;
-      const y = (clientY / window.innerHeight) * 100;
-      
+      const x = (e.clientX / window.innerWidth) * 100;
+      const y = (e.clientY / window.innerHeight) * 100;
       document.documentElement.style.setProperty('--mouse-x', `${x}%`);
       document.documentElement.style.setProperty('--mouse-y', `${y}%`);
     };
@@ -51,176 +84,141 @@ export default function Contact() {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
+  if (!isLoaded) {
+    return (
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+        <div className="text-white">Loading...</div>
+      </div>
+    );
+  }
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission here
     console.log('Form submitted:', formData);
   };
 
+  const inputBase = clsx(
+    'w-full px-4 py-3 rounded-lg transition-all duration-300',
+    isDarkMode
+      ? 'bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:border-white/40'
+      : 'bg-white/50 border border-gray-300 text-gray-900 placeholder-gray-500 focus:border-gray-500'
+  );
+
+  const cardBase = clsx(
+    'p-8 rounded-2xl transition-all duration-300',
+    isDarkMode
+      ? 'bg-white/5 backdrop-blur-sm border border-white/10'
+      : 'bg-white/50 backdrop-blur-sm border border-gray-200'
+  );
+
+  const textPrimary = isDarkMode ? 'text-white' : 'text-gray-900';
+  const textSecondary = isDarkMode ? 'text-gray-300' : 'text-gray-600';
+
   return (
-    <div className={`min-h-screen relative overflow-hidden transition-all duration-1000 ${
-      isDarkMode 
-        ? 'bg-gradient-to-br from-gray-900 via-blue-900/20 to-black' 
-        : 'bg-gradient-to-br from-blue-50 via-white to-blue-100'
-    }`}>
-      {/* New Navigation Bar */}
-      <NewNavigation isDarkMode={isDarkMode} onToggleTheme={() => setIsDarkMode(!isDarkMode)} />
+    <div
+      className={clsx(
+        'min-h-screen relative overflow-hidden transition-all duration-1000',
+        isDarkMode
+          ? 'bg-gradient-to-br from-gray-900 via-blue-900/20 to-black'
+          : 'bg-gradient-to-br from-blue-50 via-white to-blue-100'
+      )}
+    >
+      <NavBar isDarkMode={isDarkMode} onToggleTheme={toggleTheme} /> {/* ✅ synced theme */}
 
-      {/* Animated background gradient */}
-      <div className={`absolute inset-0 transition-all duration-1000 ${
-        isDarkMode 
-          ? 'bg-gradient-radial from-blue-500/10 via-transparent to-transparent' 
-          : 'bg-gradient-radial from-blue-400/20 via-transparent to-transparent'
-      }`} 
-      style={{
-        backgroundPosition: 'var(--mouse-x, 50%) var(--mouse-y, 50%)',
-        backgroundSize: '800px 800px'
-      }} />
-      
-      {/* Noise texture overlay */}
-      <div className="absolute inset-0 opacity-30 mix-blend-overlay">
-        <div className="w-full h-full" style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
-        }} />
-      </div>
+      <div
+        className={clsx(
+          'absolute inset-0 transition-all duration-1000',
+          isDarkMode
+            ? 'bg-gradient-radial from-blue-500/10 via-transparent to-transparent'
+            : 'bg-gradient-radial from-blue-400/20 via-transparent to-transparent'
+        )}
+        style={{
+          backgroundPosition: 'var(--mouse-x, 50%) var(--mouse-y, 50%)',
+          backgroundSize: '800px 800px',
+        }}
+      />
 
-      {/* Floating particles effect */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {particleData.map((particle, i) => (
-          <div
-            key={i}
-            className={`absolute w-1 h-1 rounded-full animate-float ${
-              isDarkMode ? 'bg-blue-400/30' : 'bg-blue-600/20'
-            }`}
-            style={{
-              left: particle.left,
-              top: particle.top,
-              animationDelay: particle.delay,
-              animationDuration: particle.duration
-            }}
-          />
-        ))}
-      </div>
+      <NoiseOverlay />
+      <FloatingParticles isDarkMode={isDarkMode} />
 
-      {/* Main content */}
+      {/* Content */}
       <div className="relative z-10 min-h-screen flex flex-col pt-16">
         <main className="flex-1 flex items-center justify-center px-6 py-12">
           <div className="max-w-6xl mx-auto w-full">
-            {/* Hero Section */}
+            {/* Hero */}
             <div className="text-center mb-16">
-              <h1 className={`text-5xl md:text-7xl font-bold mb-6 leading-tight transition-all duration-500 ${
-                isDarkMode ? 'text-white' : 'text-gray-900'
-              }`}>
+              <h1
+                className={clsx(
+                  'text-5xl md:text-7xl font-bold mb-6 leading-tight transition-all duration-500',
+                  textPrimary
+                )}
+              >
                 Let's Connect
               </h1>
-              <p className={`text-xl md:text-2xl max-w-2xl mx-auto leading-relaxed transition-colors duration-500 ${
-                isDarkMode ? 'text-gray-300' : 'text-gray-600'
-              }`}>
-                Ready to start your next project? I'd love to hear from you and discuss how we can work together.
+              <p
+                className={clsx(
+                  'text-xl md:text-2xl max-w-2xl mx-auto leading-relaxed transition-colors duration-500',
+                  textSecondary
+                )}
+              >
+                Ready to start your next project? I'd love to hear from you and
+                discuss how we can work together.
               </p>
             </div>
 
-            {/* Contact Content */}
             <div className="grid lg:grid-cols-2 gap-12">
-              {/* Contact Form */}
-              <div className={`p-8 rounded-2xl transition-all duration-300 ${
-                isDarkMode 
-                  ? 'bg-white/5 backdrop-blur-sm border border-white/10' 
-                  : 'bg-white/50 backdrop-blur-sm border border-gray-200'
-              }`}>
-                <h2 className={`text-3xl font-bold mb-6 ${
-                  isDarkMode ? 'text-white' : 'text-gray-900'
-                }`}>
+              <div className={cardBase}>
+                <h2 className={clsx('text-3xl font-bold mb-6', textPrimary)}>
                   Send a Message
                 </h2>
-                
                 <form onSubmit={handleSubmit} className="space-y-6">
-                  <div>
-                    <label className={`block text-sm font-medium mb-2 ${
-                      isDarkMode ? 'text-gray-300' : 'text-gray-700'
-                    }`}>
-                      Name
-                    </label>
-                    <input
-                      type="text"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleInputChange}
-                      className={`w-full px-4 py-3 rounded-lg transition-all duration-300 ${
-                        isDarkMode
-                          ? 'bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:border-white/40'
-                          : 'bg-white/50 border border-gray-300 text-gray-900 placeholder-gray-500 focus:border-gray-500'
-                      }`}
-                      placeholder="Your name"
-                      required
-                    />
-                  </div>
+                  {['name', 'email', 'subject'].map((field, i) => (
+                    <div key={i}>
+                      <label
+                        className={clsx(
+                          'block text-sm font-medium mb-2',
+                          textSecondary
+                        )}
+                      >
+                        {field[0].toUpperCase() + field.slice(1)}
+                      </label>
+                      <input
+                        type={field === 'email' ? 'email' : 'text'}
+                        name={field}
+                        value={(formData as any)[field]}
+                        onChange={handleChange}
+                        className={inputBase}
+                        placeholder={
+                          field === 'email'
+                            ? 'your.email@example.com'
+                            : field === 'subject'
+                            ? 'Project inquiry'
+                            : 'Your name'
+                        }
+                        required
+                      />
+                    </div>
+                  ))}
 
                   <div>
-                    <label className={`block text-sm font-medium mb-2 ${
-                      isDarkMode ? 'text-gray-300' : 'text-gray-700'
-                    }`}>
-                      Email
-                    </label>
-                    <input
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      className={`w-full px-4 py-3 rounded-lg transition-all duration-300 ${
-                        isDarkMode
-                          ? 'bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:border-white/40'
-                          : 'bg-white/50 border border-gray-300 text-gray-900 placeholder-gray-500 focus:border-gray-500'
-                      }`}
-                      placeholder="your.email@example.com"
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label className={`block text-sm font-medium mb-2 ${
-                      isDarkMode ? 'text-gray-300' : 'text-gray-700'
-                    }`}>
-                      Subject
-                    </label>
-                    <input
-                      type="text"
-                      name="subject"
-                      value={formData.subject}
-                      onChange={handleInputChange}
-                      className={`w-full px-4 py-3 rounded-lg transition-all duration-300 ${
-                        isDarkMode
-                          ? 'bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:border-white/40'
-                          : 'bg-white/50 border border-gray-300 text-gray-900 placeholder-gray-500 focus:border-gray-500'
-                      }`}
-                      placeholder="Project inquiry"
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label className={`block text-sm font-medium mb-2 ${
-                      isDarkMode ? 'text-gray-300' : 'text-gray-700'
-                    }`}>
+                    <label
+                      className={clsx(
+                        'block text-sm font-medium mb-2',
+                        textSecondary
+                      )}
+                    >
                       Message
                     </label>
                     <textarea
                       name="message"
                       value={formData.message}
-                      onChange={handleInputChange}
+                      onChange={handleChange}
                       rows={6}
-                      className={`w-full px-4 py-3 rounded-lg transition-all duration-300 resize-none ${
-                        isDarkMode
-                          ? 'bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:border-white/40'
-                          : 'bg-white/50 border border-gray-300 text-gray-900 placeholder-gray-500 focus:border-gray-500'
-                      }`}
+                      className={clsx(inputBase, 'resize-none')}
                       placeholder="Tell me about your project..."
                       required
                     />
@@ -228,136 +226,73 @@ export default function Contact() {
 
                   <button
                     type="submit"
-                    className={`w-full py-4 rounded-lg font-semibold text-lg transition-all duration-300 transform hover:scale-105 ${
+                    className={clsx(
+                      'w-full py-4 rounded-lg font-semibold text-lg transition-all duration-300 transform hover:scale-105',
                       isDarkMode
                         ? 'bg-white text-black hover:bg-gray-200'
                         : 'bg-gray-900 text-white hover:bg-gray-800'
-                    }`}
+                    )}
                   >
                     Send Message
                   </button>
                 </form>
               </div>
 
-              {/* Contact Information */}
               <div className="space-y-8">
-                <div className={`p-8 rounded-2xl transition-all duration-300 ${
-                  isDarkMode 
-                    ? 'bg-white/5 backdrop-blur-sm border border-white/10' 
-                    : 'bg-white/50 backdrop-blur-sm border border-gray-200'
-                }`}>
-                  <h3 className={`text-2xl font-bold mb-6 ${
-                    isDarkMode ? 'text-white' : 'text-gray-900'
-                  }`}>
+                <div className={cardBase}>
+                  <h3 className={clsx('text-2xl font-bold mb-6', textPrimary)}>
                     Get in Touch
                   </h3>
-                  
                   <div className="space-y-6">
-                    <div className="flex items-center space-x-4">
-                      <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
-                        isDarkMode ? 'bg-white/10' : 'bg-gray-900/10'
-                      }`}>
-                        📧
+                    {[
+                      { icon: '📧', label: 'Email', value: 'hello@yourportfolio.com' },
+                      { icon: '📱', label: 'Phone', value: '+1 (555) 123-4567' },
+                      { icon: '📍', label: 'Location', value: 'San Francisco, CA' },
+                    ].map((item, i) => (
+                      <div key={i} className="flex items-center space-x-4">
+                        <div
+                          className={clsx(
+                            'w-12 h-12 rounded-full flex items-center justify-center',
+                            isDarkMode ? 'bg-white/10' : 'bg-gray-900/10'
+                          )}
+                        >
+                          {item.icon}
+                        </div>
+                        <div>
+                          <p className={clsx('font-medium', textPrimary)}>
+                            {item.label}
+                          </p>
+                          <p className={clsx('text-sm', textSecondary)}>
+                            {item.value}
+                          </p>
+                        </div>
                       </div>
-                      <div>
-                        <p className={`font-medium ${
-                          isDarkMode ? 'text-white' : 'text-gray-900'
-                        }`}>
-                          Email
-                        </p>
-                        <p className={`text-sm ${
-                          isDarkMode ? 'text-gray-300' : 'text-gray-600'
-                        }`}>
-                          hello@yourportfolio.com
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center space-x-4">
-                      <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
-                        isDarkMode ? 'bg-white/10' : 'bg-gray-900/10'
-                      }`}>
-                        📱
-                      </div>
-                      <div>
-                        <p className={`font-medium ${
-                          isDarkMode ? 'text-white' : 'text-gray-900'
-                        }`}>
-                          Phone
-                        </p>
-                        <p className={`text-sm ${
-                          isDarkMode ? 'text-gray-300' : 'text-gray-600'
-                        }`}>
-                          +1 (555) 123-4567
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center space-x-4">
-                      <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
-                        isDarkMode ? 'bg-white/10' : 'bg-gray-900/10'
-                      }`}>
-                        📍
-                      </div>
-                      <div>
-                        <p className={`font-medium ${
-                          isDarkMode ? 'text-white' : 'text-gray-900'
-                        }`}>
-                          Location
-                        </p>
-                        <p className={`text-sm ${
-                          isDarkMode ? 'text-gray-300' : 'text-gray-600'
-                        }`}>
-                          San Francisco, CA
-                        </p>
-                      </div>
-                    </div>
+                    ))}
                   </div>
                 </div>
 
-                <div className={`p-8 rounded-2xl transition-all duration-300 ${
-                  isDarkMode 
-                    ? 'bg-white/5 backdrop-blur-sm border border-white/10' 
-                    : 'bg-white/50 backdrop-blur-sm border border-gray-200'
-                }`}>
-                  <h3 className={`text-2xl font-bold mb-6 ${
-                    isDarkMode ? 'text-white' : 'text-gray-900'
-                  }`}>
+                <div className={cardBase}>
+                  <h3 className={clsx('text-2xl font-bold mb-6', textPrimary)}>
                     Let's Work Together
                   </h3>
-                  
-                  <p className={`text-lg leading-relaxed mb-6 ${
-                    isDarkMode ? 'text-gray-300' : 'text-gray-600'
-                  }`}>
-                    I'm always open to discussing new projects, creative ideas, or opportunities to be part of your visions.
+                  <p className={clsx('text-lg leading-relaxed mb-6', textSecondary)}>
+                    I'm always open to discussing new projects, creative ideas, or
+                    opportunities to be part of your visions.
                   </p>
-                  
-                  <div className="space-y-3">
-                    <div className={`flex items-center space-x-3 ${
-                      isDarkMode ? 'text-gray-300' : 'text-gray-600'
-                    }`}>
-                      <div className={`w-2 h-2 rounded-full ${
-                        isDarkMode ? 'bg-blue-400' : 'bg-blue-600'
-                      }`} />
-                      <span>Web Development</span>
+                  {['Web Development', 'UI/UX Design', 'Consulting'].map((s, i) => (
+                    <div
+                      key={i}
+                      className={clsx('flex items-center space-x-3', textSecondary)}
+                    >
+                      <div
+                        className={clsx(
+                          'w-2 h-2 rounded-full',
+                          isDarkMode ? 'bg-blue-400' : 'bg-blue-600'
+                        )}
+                      />
+                      <span>{s}</span>
                     </div>
-                    <div className={`flex items-center space-x-3 ${
-                      isDarkMode ? 'text-gray-300' : 'text-gray-600'
-                    }`}>
-                      <div className={`w-2 h-2 rounded-full ${
-                        isDarkMode ? 'bg-blue-400' : 'bg-blue-600'
-                      }`} />
-                      <span>UI/UX Design</span>
-                    </div>
-                    <div className={`flex items-center space-x-3 ${
-                      isDarkMode ? 'text-gray-300' : 'text-gray-600'
-                    }`}>
-                      <div className={`w-2 h-2 rounded-full ${
-                        isDarkMode ? 'bg-blue-400' : 'bg-blue-600'
-                      }`} />
-                      <span>Consulting</span>
-                    </div>
-                  </div>
+                  ))}
                 </div>
               </div>
             </div>
