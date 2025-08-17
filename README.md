@@ -52,13 +52,6 @@ A modern, responsive portfolio website built with Next.js 15, TypeScript, and Ta
 - **Touch-optimized** interactions for mobile devices
 - **Flexible layouts** that adapt to all screen sizes
 
-## Deployment
-
-### Vercel (Recommended)
-1. Push code to GitHub
-2. Connect repository to Vercel
-3. Deploy automatically
-
 ### Other Platforms
 ```bash
 npm run build
