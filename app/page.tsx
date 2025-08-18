@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import NavBar from '../components/NavBar';
 import { HeartIcon, SquareIcon } from '../components/HeroIcons';
 import { NoiseOverlay, FloatingParticles } from '../components/Particles';
+import PromotionalCard from '../components/PromotionalCard';
 import { useTheme } from '../hooks/useTheme';
 
 export default function Home() {
@@ -110,7 +111,7 @@ export default function Home() {
           </div>
         </main>
 
-        <footer className="p-8">
+        <section className="p-8">
           <div className="flex justify-center items-center gap-6 md:gap-8 flex-wrap">
             <div className="w-12 h-12 rounded-full bg-gradient-to-br from-pink-400 to-purple-600 flex items-center justify-center text-white shadow-lg hover:scale-110 transition-all duration-300 animate-float" style={{ animationDelay: '0.1s' }}>
               <HeartIcon />
@@ -122,7 +123,12 @@ export default function Home() {
               W
             </div>
           </div>
-        </footer>
+        </section>
+
+        <main>
+          <PromotionalCard />
+        </main>
+
       </div>
     </div>
   );
