@@ -2,30 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import NavBar from '../../components/NavBar';
-import { useTheme } from '../../hooks/useTheme'; // ✅ shared theme hook
-
-const particleData = [
-  { left: '10%', top: '20%', delay: '0.1s', duration: '3.5s' },
-  { left: '25%', top: '45%', delay: '0.3s', duration: '4.2s' },
-  { left: '40%', top: '15%', delay: '0.5s', duration: '3.8s' },
-  { left: '55%', top: '70%', delay: '0.7s', duration: '4.0s' },
-  { left: '70%', top: '30%', delay: '0.9s', duration: '3.6s' },
-  { left: '85%', top: '60%', delay: '1.1s', duration: '4.1s' },
-  { left: '15%', top: '80%', delay: '1.3s', duration: '3.9s' },
-  { left: '30%', top: '10%', delay: '1.5s', duration: '3.7s' },
-  { left: '45%', top: '55%', delay: '1.7s', duration: '4.3s' },
-  { left: '60%', top: '25%', delay: '1.9s', duration: '3.4s' },
-  { left: '75%', top: '75%', delay: '2.1s', duration: '4.0s' },
-  { left: '90%', top: '40%', delay: '2.3s', duration: '3.8s' },
-  { left: '5%', top: '65%', delay: '2.5s', duration: '3.6s' },
-  { left: '20%', top: '35%', delay: '2.7s', duration: '4.2s' },
-  { left: '35%', top: '85%', delay: '2.9s', duration: '3.9s' },
-  { left: '50%', top: '5%', delay: '3.1s', duration: '3.7s' },
-  { left: '65%', top: '50%', delay: '3.3s', duration: '4.1s' },
-  { left: '80%', top: '20%', delay: '3.5s', duration: '3.5s' },
-  { left: '95%', top: '80%', delay: '3.7s', duration: '4.0s' },
-  { left: '10%', top: '90%', delay: '3.9s', duration: '3.8s' },
-];
+import { NoiseOverlay, FloatingParticles } from '../../components/Particles';
+import { useTheme } from '../../hooks/useTheme';
 
 interface Project {
   id: number;
@@ -131,10 +109,8 @@ export default function Work() {
         ? 'bg-gradient-to-br from-gray-900 via-blue-900/20 to-black' 
         : 'bg-gradient-to-br from-blue-50 via-white to-blue-100'
     }`}>
-      {/* ✅ pass theme props */}
       <NavBar isDarkMode={isDarkMode} onToggleTheme={toggleTheme} />
 
-      {/* Mouse-based radial background */}
       <div className={`absolute inset-0 transition-all duration-1000 ${
         isDarkMode 
           ? 'bg-gradient-radial from-blue-500/10 via-transparent to-transparent' 
@@ -145,32 +121,9 @@ export default function Work() {
         backgroundSize: '800px 800px'
       }} />
 
-      {/* Noise overlay */}
-      <div className="absolute inset-0 opacity-30 mix-blend-overlay">
-        <div className="w-full h-full" style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
-        }} />
-      </div>
+      <NoiseOverlay />
+      <FloatingParticles isDarkMode={isDarkMode} />
 
-      {/* Floating particles */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {particleData.map((particle, i) => (
-          <div
-            key={i}
-            className={`absolute w-1 h-1 rounded-full animate-float ${
-              isDarkMode ? 'bg-blue-400/30' : 'bg-blue-600/20'
-            }`}
-            style={{
-              left: particle.left,
-              top: particle.top,
-              animationDelay: particle.delay,
-              animationDuration: particle.duration
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Content */}
       <div className="relative z-10 min-h-screen flex flex-col pt-16">
         <main className="flex-1 px-6 py-12">
           <div className="max-w-7xl mx-auto">
@@ -188,7 +141,6 @@ export default function Work() {
               </p>
             </div>
 
-            {/* Category filter */}
             <div className="flex justify-center mb-12">
               <div className={`flex flex-wrap gap-2 p-2 rounded-2xl ${
                 isDarkMode 

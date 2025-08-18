@@ -3,30 +3,8 @@
 import { useEffect } from 'react';
 import NavBar from '../components/NavBar';
 import { HeartIcon, SquareIcon } from '../components/HeroIcons';
+import { NoiseOverlay, FloatingParticles } from '../components/Particles';
 import { useTheme } from '../hooks/useTheme';
-
-const particleData = Object.freeze([
-  { left: '10%', top: '20%', delay: '0.1s', duration: '3.5s' },
-  { left: '25%', top: '45%', delay: '0.3s', duration: '4.2s' },
-  { left: '40%', top: '15%', delay: '0.5s', duration: '3.8s' },
-  { left: '55%', top: '70%', delay: '0.7s', duration: '4.0s' },
-  { left: '70%', top: '30%', delay: '0.9s', duration: '3.6s' },
-  { left: '85%', top: '60%', delay: '1.1s', duration: '4.1s' },
-  { left: '15%', top: '80%', delay: '1.3s', duration: '3.9s' },
-  { left: '30%', top: '10%', delay: '1.5s', duration: '3.7s' },
-  { left: '45%', top: '55%', delay: '1.7s', duration: '4.3s' },
-  { left: '60%', top: '25%', delay: '1.9s', duration: '3.4s' },
-  { left: '75%', top: '75%', delay: '2.1s', duration: '4.0s' },
-  { left: '90%', top: '40%', delay: '2.3s', duration: '3.8s' },
-  { left: '5%', top: '65%', delay: '2.5s', duration: '3.6s' },
-  { left: '20%', top: '35%', delay: '2.7s', duration: '4.2s' },
-  { left: '35%', top: '85%', delay: '2.9s', duration: '3.9s' },
-  { left: '50%', top: '5%', delay: '3.1s', duration: '3.7s' },
-  { left: '65%', top: '50%', delay: '3.3s', duration: '4.1s' },
-  { left: '80%', top: '20%', delay: '3.5s', duration: '3.5s' },
-  { left: '95%', top: '80%', delay: '3.7s', duration: '4.0s' },
-  { left: '10%', top: '90%', delay: '3.9s', duration: '3.8s' },
-]);
 
 export default function Home() {
   const { isDarkMode, toggleTheme, isLoaded } = useTheme();
@@ -65,22 +43,8 @@ export default function Home() {
         style={{ backgroundPosition: 'var(--mouse-x, 50%) var(--mouse-y, 50%)', backgroundSize: '800px 800px' }}
       />
 
-      <div
-        className="absolute inset-0 opacity-30 mix-blend-overlay"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
-        }}
-      />
-
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {particleData.map((p, i) => (
-          <div
-            key={i}
-            className={`absolute w-1 h-1 rounded-full animate-float ${isDarkMode ? 'bg-blue-400/30' : 'bg-blue-600/20'}`}
-            style={{ left: p.left, top: p.top, animationDelay: p.delay, animationDuration: p.duration }}
-          />
-        ))}
-      </div>
+      <NoiseOverlay />
+      <FloatingParticles isDarkMode={isDarkMode} />
 
       <div className="relative z-10 min-h-screen flex flex-col pt-16">
         <main className="flex-1 flex items-center justify-center px-6">
@@ -131,7 +95,7 @@ export default function Home() {
                   isDarkMode ? 'bg-black text-white hover:bg-gray-800 glow' : 'bg-gray-900 text-white hover:bg-gray-800'
                 }`}
               >
-                Remix Template
+                Template
               </button>
               <button
                 className={`px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 transform hover:scale-105 border-2 ${
@@ -140,7 +104,7 @@ export default function Home() {
                     : 'bg-white/50 text-gray-800 border-gray-300 hover:bg-white/70'
                 }`}
               >
-                Get Athos Plus
+                Connect
               </button>
             </div>
           </div>
