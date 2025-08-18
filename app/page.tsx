@@ -5,6 +5,7 @@ import NavBar from '../components/NavBar';
 import { HeartIcon, SquareIcon } from '../components/HeroIcons';
 import { NoiseOverlay, FloatingParticles } from '../components/Particles';
 import PromotionalCard from '../components/PromotionalCard';
+import HireCard from '../components/HireCard';
 import { useTheme } from '../hooks/useTheme';
 
 export default function Home() {
@@ -129,6 +130,9 @@ export default function Home() {
           <PromotionalCard />
         </main>
 
+        <main>
+          <HireCard isDarkMode={isDarkMode} />
+        </main>
       </div>
     </div>
   );
