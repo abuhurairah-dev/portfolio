@@ -7,6 +7,7 @@ import { NoiseOverlay, FloatingParticles } from '../components/Particles';
 import PromotionalCard from '../components/PromotionalCard';
 import HireCard from '../components/HireCard';
 import { useTheme } from '../hooks/useTheme';
+import Footer from '@/components/Footer';
 
 export default function Home() {
   const { isDarkMode, toggleTheme, isLoaded } = useTheme();
@@ -134,6 +135,8 @@ export default function Home() {
           <HireCard isDarkMode={isDarkMode} />
         </main>
       </div>
+
+      <Footer isDarkMode={isDarkMode} />
     </div>
   );
 }
