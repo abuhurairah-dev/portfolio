@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import { motion } from 'framer-motion';
 import NavBar from '../components/NavBar';
 import { HeartIcon, SquareIcon } from '../components/HeroIcons';
 import { NoiseOverlay, FloatingParticles } from '../components/Particles';
@@ -32,6 +33,12 @@ export default function Home() {
   const gradientBg = isDarkMode
     ? 'bg-gradient-to-br from-gray-900 via-blue-900/20 to-black'
     : 'bg-gradient-to-br from-blue-50 via-white to-blue-100';
+
+  const icons = [
+    <HeartIcon key="heart" />,
+    <SquareIcon key="square" />,
+    <span key="w" className="font-bold text-xl">W</span>,
+  ];
 
   return (
     <div className={`min-h-screen relative overflow-hidden transition-all duration-1000 ${gradientBg}`}>
@@ -113,17 +120,26 @@ export default function Home() {
           </div>
         </main>
 
-        <section className="p-8">
-          <div className="flex justify-center items-center gap-6 md:gap-8 flex-wrap">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-pink-400 to-purple-600 flex items-center justify-center text-white shadow-lg hover:scale-110 transition-all duration-300 animate-float" style={{ animationDelay: '0.1s' }}>
-              <HeartIcon />
-            </div>
-            <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-purple-400 to-pink-500 flex items-center justify-center text-white shadow-lg hover:scale-110 transition-all duration-300 animate-float" style={{ animationDelay: '0.2s' }}>
-              <SquareIcon />
-            </div>
-            <div className="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-xl shadow-lg hover:scale-110 transition-all duration-300 animate-float" style={{ animationDelay: '0.3s' }}>
-              W
-            </div>
+        <section className="flex justify-center py-20">
+          <div className="relative w-1/2 h-20 overflow-hidden">
+            <motion.div
+              className="flex gap-10 h-full"
+              animate={{ x: ["0%", "-100%"] }}
+              transition={{
+                repeat: Infinity,
+                duration: 10,
+                ease: "linear",
+              }}
+            >
+              {[...icons, ...icons].map((icon, i) => (
+                <div
+                  key={i}
+                  className="w-16 h-16 flex items-center justify-center rounded-full shadow-lg bg-gradient-to-br from-pink-400 to-purple-600 text-white flex-shrink-0"
+                >
+                  {icon}
+                </div>
+              ))}
+            </motion.div>
           </div>
         </section>
 
