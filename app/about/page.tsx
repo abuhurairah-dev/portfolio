@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import NavBar from '../../components/NavBar';
 import { NoiseOverlay, FloatingParticles } from '../../components/Particles';
+import EducationSection from '../../components/EducationSection';
 import { useTheme } from '../../hooks/useTheme';
 import { motion } from 'framer-motion';
 import {
@@ -240,6 +241,8 @@ export default function About() {
                 ))}
               </div>
             </div>
+
+            <EducationSection isDarkMode={isDarkMode} />
           </div>
         </main>
       </div>
