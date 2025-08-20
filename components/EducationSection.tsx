@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 
 interface EducationItem {
   degree: string;
@@ -27,17 +27,22 @@ const education: EducationItem[] = [
 ];
 
 // Animation variants
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: { opacity: 0 },
   show: {
     opacity: 1,
-    transition: { staggerChildren: 0.2 },
+    transition: { staggerChildren: 0.25, delayChildren: 0.2 },
   },
 };
 
-const cardVariants = {
-  hidden: { opacity: 0, y: 40 },
-  show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 120 } },
+const cardVariants: Variants = {
+  hidden: { opacity: 0, y: 40, scale: 0.95 },
+  show: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { type: 'spring', stiffness: 120, damping: 15 },
+  },
 };
 
 export default function EducationSection({ isDarkMode }: { isDarkMode: boolean }) {
@@ -45,7 +50,8 @@ export default function EducationSection({ isDarkMode }: { isDarkMode: boolean }
     <div className="mb-20 text-center">
       <motion.h2
         initial={{ opacity: 0, y: -30 }}
-        animate={{ opacity: 1, y: 0 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
         transition={{ duration: 0.6 }}
         className={`text-4xl md:text-5xl font-bold mb-12 ${
           isDarkMode ? 'text-white' : 'text-gray-900'
@@ -65,10 +71,14 @@ export default function EducationSection({ isDarkMode }: { isDarkMode: boolean }
           <motion.div
             key={index}
             variants={cardVariants}
-            whileHover={{ scale: 1.03, boxShadow: isDarkMode
-              ? '0px 8px 25px rgba(0,0,0,0.4)'
-              : '0px 8px 20px rgba(0,0,0,0.15)' }}
-            transition={{ type: 'spring', stiffness: 200 }}
+            whileHover={{
+              scale: 1.04,
+              y: -5,
+              boxShadow: isDarkMode
+                ? '0px 8px 30px rgba(0,0,0,0.5)'
+                : '0px 8px 25px rgba(0,0,0,0.12)',
+            }}
+            transition={{ type: 'spring', stiffness: 250, damping: 18 }}
             className={`p-6 rounded-2xl shadow-lg transition-all duration-300 text-left ${
               isDarkMode
                 ? 'bg-white/5 backdrop-blur-md border border-white/10'
@@ -83,11 +93,17 @@ export default function EducationSection({ isDarkMode }: { isDarkMode: boolean }
               {item.degree}
             </h3>
             <p
-              className={`text-lg ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}
+              className={`text-lg ${
+                isDarkMode ? 'text-gray-300' : 'text-gray-700'
+              }`}
             >
               {item.institution}
             </p>
-            <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+            <p
+              className={`text-sm ${
+                isDarkMode ? 'text-gray-400' : 'text-gray-500'
+              }`}
+            >
               {item.year}
             </p>
           </motion.div>
