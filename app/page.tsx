@@ -43,6 +43,8 @@ export default function Home() {
   return (
     <div className={`min-h-screen relative overflow-hidden transition-all duration-1000 ${gradientBg}`}>
       <NavBar isDarkMode={isDarkMode} onToggleTheme={toggleTheme} />
+      <NoiseOverlay />
+      <FloatingParticles isDarkMode={isDarkMode} />
 
       <div
         className={`absolute inset-0 transition-all duration-1000 ${
@@ -53,15 +55,12 @@ export default function Home() {
         style={{ backgroundPosition: 'var(--mouse-x, 50%) var(--mouse-y, 50%)', backgroundSize: '800px 800px' }}
       />
 
-      <NoiseOverlay />
-      <FloatingParticles isDarkMode={isDarkMode} />
-
-      <div className="relative z-10 min-h-screen flex flex-col pt-16">
+      <div className="relative z-10 min-h-screen flex flex-col pt-30">
         <main className="flex-1 flex items-center justify-center px-6">
           <div className="text-center max-w-4xl mx-auto">
             <div className="relative mb-8 animate-float">
               <div
-                className={`w-32 h-32 mx-auto rounded-full overflow-hidden border-4 shadow-2xl transition-all duration-300 ${
+                className={`w-40 h-40 mx-auto rounded-full overflow-hidden border-4 shadow-2xl transition-all duration-300 ${
                   isDarkMode ? 'border-white/20 glow' : 'border-gray-300/50'
                 }`}
               >
@@ -87,7 +86,7 @@ export default function Home() {
                 isDarkMode ? 'text-white' : 'text-gray-900'
               }`}
             >
-              <span className={isDarkMode ? 'text-gray-300' : 'text-gray-600'}>Designed for Designers to</span>
+              <span className={isDarkMode ? 'text-gray-300' : 'text-gray-600'}>Portfolio for Full Stack Devlopers to</span>
               <span className="block"> showcase their work</span>
             </h1>
 

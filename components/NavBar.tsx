@@ -1,9 +1,11 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { createPortal } from "react-dom";
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import MobileMenu from './MobileMenu';
+import Image from "next/image";
 
 interface NavItem {
   id: string;
@@ -96,47 +98,81 @@ export default function NavBar({ isDarkMode, onToggleTheme }: NavigationProps) {
 }
 
 function Logo({ isDarkMode }: { isDarkMode: boolean }) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden"; // stop background scroll
+    } else {
+      document.body.style.overflow = ""; // reset
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
+
+  // Modal content (separate so we can portal it)
+  const modalContent = (
+    <div
+      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 backdrop-blur-sm"
+      onClick={() => setIsOpen(false)}
+    >
+      <Image
+        src="https://images.unsplash.com/photo-1503264116251-35a269479413?w=800&h=600&fit=crop"
+        alt="Enlarged Logo"
+        width={800}
+        height={800}
+        className="rounded-2xl shadow-2xl object-contain max-w-[90%] max-h-[90%]"
+      />
+    </div>
+  );
+
   return (
-    <Link href="/" className="relative overflow-hidden">
-      <div
-        className={`flex items-center space-x-3 transition-all duration-300 ${
-          isDarkMode ? 'text-white' : 'text-gray-900'
-        }`}
+    <>
+      {/* Logo clickable */}
+      <button
+        onClick={() => setIsOpen(true)}
+        className="relative overflow-hidden flex items-center space-x-3 focus:outline-none"
       >
         <div
-          className={`relative w-10 h-10 rounded-xl flex items-center justify-center
+          className={`relative w-10 h-10 rounded-xl flex items-center justify-center overflow-hidden
             ${
               isDarkMode
-                ? 'bg-gradient-to-br from-blue-500/20 to-purple-600/20 border border-white/20'
-                : 'bg-gradient-to-br from-blue-500/10 to-purple-600/10 border border-gray-200'
+                ? "bg-gradient-to-br from-blue-500/20 to-purple-600/20 border border-white/20"
+                : "bg-gradient-to-br from-blue-500/10 to-purple-600/10 border border-gray-200"
             }`}
         >
-          <span
-            className={`text-lg font-bold ${
-              isDarkMode ? 'text-blue-400' : 'text-blue-600'
-            }`}
-          >
-            P
-          </span>
+          <Image
+            src="https://images.unsplash.com/photo-1503264116251-35a269479413?w=800&h=600&fit=crop"
+            alt="Logo"
+            width={40}
+            height={40}
+            className="object-cover rounded-xl"
+          />
         </div>
-        <div className="flex flex-col">
+        <div className="flex flex-col text-left">
           <span
-            className={`text-lg font-bold tracking-tight transition-colors ${
-              isDarkMode ? 'text-white' : 'text-gray-900'
+            className={`text-lg font-bold tracking-tight ${
+              isDarkMode ? "text-white" : "text-gray-900"
             }`}
           >
             Portfolio
           </span>
           <span
-            className={`text-xs font-medium tracking-wider transition-colors ${
-              isDarkMode ? 'text-blue-400' : 'text-blue-600'
+            className={`text-xs font-medium tracking-wider ${
+              isDarkMode ? "text-blue-400" : "text-blue-600"
             }`}
           >
             DEVELOPER
           </span>
         </div>
-      </div>
-    </Link>
+      </button>
+
+      {/* Modal injected into <body> */}
+      {isOpen && typeof window !== "undefined"
+        ? createPortal(modalContent, document.body)
+        : null}
+    </>
   );
 }
 
