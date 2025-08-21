@@ -118,35 +118,21 @@ export default function About() {
               {/* Right Column */}
               <div className="space-y-8">
                 <SectionCard title="Skills & Expertise" isDarkMode={isDarkMode}>
-                  <div className="space-y-4">
+                  <div className="flex flex-wrap gap-3">
                     {[
-                      'UI/UX Design',
-                      'Frontend Development',
-                      'React & Next.js',
-                      'TypeScript',
-                      'Tailwind CSS',
-                      'Figma & Adobe Creative Suite',
-                    ].map((skill, i) => (
-                      <motion.div
+                      "React", "Next.js", "TypeScript", "Tailwind CSS",
+                      "Figma", "Photoshop", "GitHub", "UI/UX Design"
+                    ].map((skill) => (
+                      <span
                         key={skill}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: i * 0.1 }}
-                        className={`flex items-center space-x-3 group ${
-                          isDarkMode ? 'text-gray-300' : 'text-gray-600'
-                        }`}
-                      >
-                        <div
-                          className={`w-3 h-3 rounded-full transition-colors ${
-                            isDarkMode
-                              ? 'bg-blue-400 group-hover:bg-blue-300'
-                              : 'bg-blue-600 group-hover:bg-blue-500'
+                        className={`px-4 py-2 rounded-full text-sm font-medium shadow-md
+                          ${isDarkMode 
+                            ? "bg-white/10 text-gray-200 hover:bg-white/20"
+                            : "bg-gray-100 text-gray-800 hover:bg-gray-200"
                           }`}
-                        />
-                        <span className="text-lg font-medium group-hover:scale-105 transition-transform">
-                          {skill}
-                        </span>
-                      </motion.div>
+                      >
+                        {skill}
+                      </span>
                     ))}
                   </div>
                 </SectionCard>
