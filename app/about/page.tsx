@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import NavBar from '../../components/NavBar';
 import { NoiseOverlay, FloatingParticles } from '../../components/Particles';
 import EducationSection from '../../components/EducationSection';
+import ExperienceSection from '../../components/ExperienceSection';
 import { useTheme } from '../../hooks/useTheme';
 import { motion } from 'framer-motion';
 import {
@@ -242,6 +243,7 @@ export default function About() {
               </div>
             </div>
 
+            <ExperienceSection isDarkMode={isDarkMode} />
             <EducationSection isDarkMode={isDarkMode} />
           </div>
         </main>
