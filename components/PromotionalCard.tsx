@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useRef } from 'react';
-import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import React from 'react';
+import { motion, Variants } from 'framer-motion';
 
 type Metric = { label: string; value: string };
 type Slide = {
@@ -47,66 +47,35 @@ const slides: Slide[] = [
   },
 ];
 
+// Animation variants
+const cardVariants: Variants = {
+  hidden: { opacity: 0, y: 40 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      delay: i * 0.2,
+      ease: 'easeOut',
+    },
+  }),
+};
+
 export default function PromotionalCard() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start start', 'end end'],
-  });
-
-  const total = slides.length;
-  const cardHeight = 400;
-  const spacing = 0;
-  const peek = 5; // how much of the pinned card remains visible
-
-  // PREPARE y-springs for cards 1…n (we’ll render slide[0] as sticky)
-  const ySprings = slides.slice(1).map((_, idx) => {
-    const slideIndex = idx + 1;
-    const start = slideIndex / total;
-    const end = (slideIndex + 1) / total;
-
-    // 0→1 over this card’s scroll window
-    const progress = useTransform(scrollYProgress, [start, end], [0, 1], {
-      clamp: true,
-    });
-
-    // calculate initial vertical offset and how far to move
-    const initialY = slideIndex * (cardHeight + spacing);
-    const moveUp = slideIndex * (cardHeight - peek);
-
-    // map progress → actual y value
-    const yValue = useTransform(progress, (v) => initialY - v * moveUp);
-
-    // smooth it out
-    return useSpring(yValue, { stiffness: 200, damping: 30 });
-  });
-
   return (
-    <section
-      ref={containerRef}
-      className="relative w-full"
-      style={{ height: cardHeight + (cardHeight - 0) * (total - 1) }}
-    >
-      {/* 1) Sticky first card */}
-      <div className="sticky top-0 z-30 w-full max-w-4xl mx-auto">
-        <Card slide={slides[0]} />
-      </div>
-
-      {/* 2) Absolutely position the rest */}
-      {slides.slice(1).map((slide, idx) => {
-        const y = ySprings[idx];
-        const zIndex = 100 + idx + 1;
-
-        return (
-          <motion.div
-            key={idx}
-            style={{ y, zIndex }}
-            className="absolute left-0 right-0 mx-auto w-full max-w-4xl"
-          >
-            <Card slide={slide} />
-          </motion.div>
-        );
-      })}
+    <section className="w-full max-w-4xl mx-auto flex flex-col gap-8">
+      {slides.map((slide, idx) => (
+        <motion.div
+          key={idx}
+          custom={idx}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          variants={cardVariants}
+        >
+          <Card slide={slide} />
+        </motion.div>
+      ))}
     </section>
   );
 }
@@ -147,9 +116,13 @@ function Card({ slide }: { slide: Slide }) {
           ))}
         </div>
         {slide.cta && (
-          <button className="px-6 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition">
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.98 }}
+            className="px-6 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full shadow transition"
+          >
             {slide.cta}
-          </button>
+          </motion.button>
         )}
       </div>
     </div>
