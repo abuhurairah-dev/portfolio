@@ -1,21 +1,15 @@
 'use client';
 
 import React from 'react';
-
-interface Project {
-  id: number;
-  title: string;
-  description: string;
-  image: React.ReactNode;
-  link: string;
-}
+import { projects } from '@/data/projects';
 
 interface LatestWorkProps {
-  projects: Project[];
   isDarkMode: boolean;
 }
 
-export default function LatestWork({ projects, isDarkMode }: LatestWorkProps) {
+export default function LatestWork({ isDarkMode }: LatestWorkProps) {
+  const latestProjects = projects.filter((project) => project.latest);
+
   return (
     <section className="mb-20">
       <h2
@@ -26,7 +20,7 @@ export default function LatestWork({ projects, isDarkMode }: LatestWorkProps) {
         ✨ Latest Work
       </h2>
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {projects.slice(0, 3).map((project) => (
+        {latestProjects.map((project) => (
           <div
             key={project.id}
             className={`group p-6 rounded-2xl transition-all duration-500 hover:scale-[1.03] hover:shadow-xl ${
