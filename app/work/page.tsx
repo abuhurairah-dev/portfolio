@@ -5,7 +5,7 @@ import NavBar from '../../components/NavBar';
 import { NoiseOverlay, FloatingParticles } from '../../components/Particles';
 import { useTheme } from '../../hooks/useTheme';
 import LatestWork from '@/components/LatestWork';
-import { projects } from '@/data/projects'; // 👈 import from shared data file
+import { projects } from '@/data/projects';
 
 export default function Work() {
   const { isDarkMode, toggleTheme, isLoaded } = useTheme();

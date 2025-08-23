@@ -9,6 +9,8 @@ import PromotionalCard from '../components/PromotionalCard';
 import HireCard from '../components/HireCard';
 import { useTheme } from '../hooks/useTheme';
 import Footer from '@/components/Footer';
+import LatestWork from '@/components/LatestWork';
+import { Code, Github, Figma, Linkedin, Laptop, Database, Globe, Cpu } from "lucide-react";
 
 export default function Home() {
   const { isDarkMode, toggleTheme, isLoaded } = useTheme();
@@ -35,9 +37,14 @@ export default function Home() {
     : 'bg-gradient-to-br from-blue-50 via-white to-blue-100';
 
   const icons = [
-    <HeartIcon key="heart" />,
-    <SquareIcon key="square" />,
-    <span key="w" className="font-bold text-xl">W</span>,
+    { icon: <Code size={28} />, bg: "from-indigo-500 to-purple-500" },
+    { icon: <Github size={28} />, bg: "from-gray-800 to-gray-600" },
+    { icon: <Figma size={28} />, bg: "from-pink-500 to-purple-500" },
+    { icon: <Linkedin size={28} />, bg: "from-blue-600 to-blue-400" },
+    { icon: <Laptop size={28} />, bg: "from-teal-500 to-cyan-500" },
+    { icon: <Database size={28} />, bg: "from-green-500 to-emerald-500" },
+    { icon: <Globe size={28} />, bg: "from-orange-500 to-yellow-500" },
+    { icon: <Cpu size={28} />, bg: "from-red-500 to-pink-500" },
   ];
 
   return (
@@ -120,23 +127,33 @@ export default function Home() {
         </main>
 
         <section className="flex justify-center py-20">
-          <div className="relative w-1/2 h-20 overflow-hidden">
+          <div className="relative w-3/4 h-28 overflow-hidden group">
+            {/* gradient mask for smooth entry/exit */}
+            <div className="absolute left-0 top-0 w-20 h-full bg-gradient-to-r from-white/90 dark:from-gray-900/90 to-transparent z-10" />
+            <div className="absolute right-0 top-0 w-20 h-full bg-gradient-to-l from-white/90 dark:from-gray-900/90 to-transparent z-10" />
+
             <motion.div
-              className="flex gap-10 h-full"
-              animate={{ x: ["0%", "-100%"] }}
+              className="flex gap-12 h-full items-center"
+              animate={{ x: ["0%", "-50%"] }}
               transition={{
                 repeat: Infinity,
-                duration: 10,
+                duration: 20, // slower, smoother
                 ease: "linear",
               }}
             >
-              {[...icons, ...icons].map((icon, i) => (
-                <div
+              {[...icons, ...icons].map((item, i) => (
+                <motion.div
                   key={i}
-                  className="w-16 h-16 flex items-center justify-center rounded-full shadow-lg bg-gradient-to-br from-pink-400 to-purple-600 text-white flex-shrink-0"
+                  className={`w-16 h-16 flex items-center justify-center rounded-full shadow-xl bg-gradient-to-br ${item.bg} text-white flex-shrink-0`}
+                  animate={{ y: [0, -8, 0], scale: [1, 1.05, 1] }}
+                  transition={{
+                    repeat: Infinity,
+                    duration: 5 + i * 0.3, // slower float with stagger
+                    ease: "easeInOut",
+                  }}
                 >
-                  {icon}
-                </div>
+                  {item.icon}
+                </motion.div>
               ))}
             </motion.div>
           </div>
@@ -145,6 +162,10 @@ export default function Home() {
         <main>
           <PromotionalCard />
         </main>
+
+        <div className="max-w-7xl mx-auto pt-50">
+          <LatestWork isDarkMode={isDarkMode} />
+        </div>
 
         <main>
           <HireCard isDarkMode={isDarkMode} />
