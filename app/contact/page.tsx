@@ -5,6 +5,7 @@ import clsx from 'clsx';
 import NavBar from '../../components/NavBar';
 import { NoiseOverlay, FloatingParticles } from '../../components/Particles';
 import { useTheme } from '../../hooks/useTheme';
+import { CheckCircle, Code, Palette, Briefcase } from "lucide-react";
 
 export default function Contact() {
   const { isDarkMode, toggleTheme, isLoaded } = useTheme();
@@ -60,6 +61,13 @@ export default function Contact() {
 
   const textPrimary = isDarkMode ? 'text-white' : 'text-gray-900';
   const textSecondary = isDarkMode ? 'text-gray-300' : 'text-gray-600';
+
+  const services = [
+    { icon: Code, label: "Web Development" },
+    { icon: Palette, label: "UI/UX Design" },
+    { icon: Briefcase, label: "Consulting" },
+  ];
+  
 
   return (
     <div
@@ -215,27 +223,27 @@ export default function Contact() {
                 </div>
 
                 <div className={cardBase}>
-                  <h3 className={clsx('text-2xl font-bold mb-6', textPrimary)}>
+                  <h3 className={clsx("text-2xl font-bold mb-6", textPrimary)}>
                     Let's Work Together
                   </h3>
-                  <p className={clsx('text-lg leading-relaxed mb-6', textSecondary)}>
+                  <p className={clsx("text-lg leading-relaxed mb-6", textSecondary)}>
                     I'm always open to discussing new projects, creative ideas, or
                     opportunities to be part of your visions.
                   </p>
-                  {['Web Development', 'UI/UX Design', 'Consulting'].map((s, i) => (
-                    <div
-                      key={i}
-                      className={clsx('flex items-center space-x-3', textSecondary)}
-                    >
-                      <div
-                        className={clsx(
-                          'w-2 h-2 rounded-full',
-                          isDarkMode ? 'bg-blue-400' : 'bg-blue-600'
-                        )}
-                      />
-                      <span>{s}</span>
-                    </div>
-                  ))}
+
+                  <div className="space-y-3">
+                    {services.map(({ icon: Icon, label }, i) => (
+                      <div key={i} className="flex items-center space-x-3">
+                        <Icon
+                          className={clsx(
+                            "w-5 h-5 flex-shrink-0",
+                            isDarkMode ? "text-blue-400" : "text-blue-600"
+                          )}
+                        />
+                        <span className={clsx("text-base", textSecondary)}>{label}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
