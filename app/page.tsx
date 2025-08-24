@@ -11,6 +11,8 @@ import { useTheme } from '../hooks/useTheme';
 import Footer from '@/components/Footer';
 import LatestWork from '@/components/LatestWork';
 import { Code, Github, Figma, Linkedin, Laptop, Database, Globe, Cpu } from "lucide-react";
+import Link from "next/link";
+import clsx from 'clsx';
 
 export default function Home() {
   const { isDarkMode, toggleTheme, isLoaded } = useTheme();
@@ -163,8 +165,31 @@ export default function Home() {
           <PromotionalCard />
         </main>
 
-        <div className="max-w-7xl mx-auto pt-50">
+        <div className="max-w-7xl mx-auto pt-50 text-center">
           <LatestWork isDarkMode={isDarkMode} />
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            viewport={{ once: true }}
+            className="mt-10"
+          >
+            <Link href="/work">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className={clsx(
+                  "px-6 py-3 rounded-lg font-semibold text-lg shadow-md transition-colors",
+                  isDarkMode
+                    ? "bg-black text-white hover:bg-gray-800 glow"
+                    : "bg-gray-900 text-white hover:bg-gray-800"
+                )}
+              >
+                View All Projects →
+              </motion.button>
+            </Link>
+          </motion.div>
         </div>
 
         <main>
