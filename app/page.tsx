@@ -129,17 +129,13 @@ export default function Home() {
         </main>
 
         <section className="flex justify-center py-20">
-          <div className="relative w-3/4 h-28 overflow-hidden group">
-            {/* gradient mask for smooth entry/exit */}
-            <div className="absolute left-0 top-0 w-20 h-full bg-gradient-to-r from-white/90 dark:from-gray-900/90 to-transparent z-10" />
-            <div className="absolute right-0 top-0 w-20 h-full bg-gradient-to-l from-white/90 dark:from-gray-900/90 to-transparent z-10" />
-
+          <div className="relative w-3/5 h-28 overflow-hidden">
             <motion.div
-              className="flex gap-12 h-full items-center"
+              className="flex gap-20 h-full items-center"
               animate={{ x: ["0%", "-50%"] }}
               transition={{
                 repeat: Infinity,
-                duration: 20, // slower, smoother
+                duration: 20,
                 ease: "linear",
               }}
             >
@@ -147,10 +143,10 @@ export default function Home() {
                 <motion.div
                   key={i}
                   className={`w-16 h-16 flex items-center justify-center rounded-full shadow-xl bg-gradient-to-br ${item.bg} text-white flex-shrink-0`}
-                  animate={{ y: [0, -8, 0], scale: [1, 1.05, 1] }}
+                  animate={{ y: [0, -10, 0], scale: [1, 1.05, 1] }}
                   transition={{
                     repeat: Infinity,
-                    duration: 5 + i * 0.3, // slower float with stagger
+                    duration: 5 + i * 0.3,
                     ease: "easeInOut",
                   }}
                 >
