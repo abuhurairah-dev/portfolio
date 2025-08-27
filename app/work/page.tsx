@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import NavBar from '../../components/NavBar';
 import { NoiseOverlay, FloatingParticles } from '../../components/Particles';
 import { useTheme } from '../../hooks/useTheme';
-import LatestWork from '@/components/LatestWork';
 import { projects } from '@/data/projects';
 
 export default function Work() {
@@ -25,10 +24,13 @@ export default function Work() {
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
-  const categories = ["All", "Web Application", "Mobile App", "Design System", "Website"];
+  const categories = ["Latest", "All", "Web Application", "Mobile App", "Design System", "Website"];
+
   const filteredProjects =
     selectedCategory === "All"
       ? projects
+      : selectedCategory === "Latest"
+      ? projects.filter((project) => project.latest)
       : projects.filter((project) => project.category === selectedCategory);
 
   if (!isLoaded) {
@@ -116,9 +118,6 @@ export default function Work() {
                 ))}
               </div>
             </div>
-
-            {/* Latest Work Section */}
-            <LatestWork isDarkMode={isDarkMode} />
 
             {/* All Projects */}
             <section>
