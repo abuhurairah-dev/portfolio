@@ -44,6 +44,8 @@ const navItems: NavItem[] = [
   { id: 'contact', label: 'Contact', href: '/contact', icon: icons.contact },
 ];
 
+const profileImage = "/avatar.png"; // Replace with your own path or pass as prop
+
 interface NavigationProps {
   isDarkMode: boolean;
   onToggleTheme: () => void;
@@ -118,11 +120,11 @@ function Logo({ isDarkMode }: { isDarkMode: boolean }) {
       onClick={() => setIsOpen(false)}
     >
       <Image
-        src="https://images.unsplash.com/photo-1503264116251-35a269479413?w=800&h=600&fit=crop"
-        alt="Enlarged Logo"
-        width={800}
-        height={800}
-        className="rounded-2xl shadow-2xl object-contain max-w-[90%] max-h-[90%]"
+        src={profileImage}
+        alt="Profile"
+        width={500}
+        height={500}
+        className="object-cover rounded-xl"
       />
     </div>
   );
@@ -135,16 +137,11 @@ function Logo({ isDarkMode }: { isDarkMode: boolean }) {
         className="relative overflow-hidden flex items-center space-x-3 focus:outline-none"
       >
         <div
-          className={`relative w-10 h-10 rounded-xl flex items-center justify-center overflow-hidden
-            ${
-              isDarkMode
-                ? "bg-gradient-to-br from-blue-500/20 to-purple-600/20 border border-white/20"
-                : "bg-gradient-to-br from-blue-500/10 to-purple-600/10 border border-gray-200"
-            }`}
+          className={`relative w-10 h-10 flex items-center justify-center overflow-hidde`}
         >
           <Image
-            src="https://images.unsplash.com/photo-1503264116251-35a269479413?w=800&h=600&fit=crop"
-            alt="Logo"
+            src={profileImage}
+            alt="Profile"
             width={40}
             height={40}
             className="object-cover rounded-xl"
