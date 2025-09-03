@@ -3,7 +3,6 @@
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import NavBar from '../components/NavBar';
-import { HeartIcon, SquareIcon } from '../components/HeroIcons';
 import { NoiseOverlay, FloatingParticles } from '../components/Particles';
 import PromotionalCard from '../components/PromotionalCard';
 import HireCard from '../components/HireCard';
@@ -38,15 +37,16 @@ export default function Home() {
     ? 'bg-gradient-to-br from-gray-900 via-blue-900/20 to-black'
     : 'bg-gradient-to-br from-blue-50 via-white to-blue-100';
 
+  // icons with labels for tooltip
   const icons = [
-    { icon: <Code size={28} />, bg: "from-indigo-500 to-purple-500" },
-    { icon: <Github size={28} />, bg: "from-gray-800 to-gray-600" },
-    { icon: <Figma size={28} />, bg: "from-pink-500 to-purple-500" },
-    { icon: <Linkedin size={28} />, bg: "from-blue-600 to-blue-400" },
-    { icon: <Laptop size={28} />, bg: "from-teal-500 to-cyan-500" },
-    { icon: <Database size={28} />, bg: "from-green-500 to-emerald-500" },
-    { icon: <Globe size={28} />, bg: "from-orange-500 to-yellow-500" },
-    { icon: <Cpu size={28} />, bg: "from-red-500 to-pink-500" },
+    { icon: <Code size={28} />, bg: "from-indigo-500 to-purple-500", label: "Code" },
+    { icon: <Github size={28} />, bg: "from-gray-800 to-gray-600", label: "GitHub" },
+    { icon: <Figma size={28} />, bg: "from-pink-500 to-purple-500", label: "Figma" },
+    { icon: <Linkedin size={28} />, bg: "from-blue-600 to-blue-400", label: "LinkedIn" },
+    { icon: <Laptop size={28} />, bg: "from-teal-500 to-cyan-500", label: "Frontend" },
+    { icon: <Database size={28} />, bg: "from-green-500 to-emerald-500", label: "Database" },
+    { icon: <Globe size={28} />, bg: "from-orange-500 to-yellow-500", label: "Web Dev" },
+    { icon: <Cpu size={28} />, bg: "from-red-500 to-pink-500", label: "Backend / Systems" },
   ];
 
   return (
@@ -128,8 +128,9 @@ export default function Home() {
           </div>
         </main>
 
+        {/* Moving icons with tooltips */}
         <section className="flex justify-center py-20">
-          <div className="relative w-3/5 h-28 overflow-hidden">
+          <div className="relative w-3/5 h-40 overflow-hidden">
             <motion.div
               className="flex gap-20 h-full items-center"
               animate={{ x: ["0%", "-50%"] }}
@@ -142,7 +143,7 @@ export default function Home() {
               {[...icons, ...icons].map((item, i) => (
                 <motion.div
                   key={i}
-                  className={`w-16 h-16 flex items-center justify-center rounded-full shadow-xl bg-gradient-to-br ${item.bg} text-white flex-shrink-0`}
+                  className="relative group flex-shrink-0"
                   animate={{ y: [0, -10, 0], scale: [1, 1.05, 1] }}
                   transition={{
                     repeat: Infinity,
@@ -150,7 +151,17 @@ export default function Home() {
                     ease: "easeInOut",
                   }}
                 >
-                  {item.icon}
+                  <div
+                    className={`w-16 h-16 flex items-center justify-center rounded-full shadow-xl bg-gradient-to-br ${item.bg} text-white`}
+                  >
+                    {item.icon}
+                  </div>
+                  {/* Tooltip */}
+                  <div
+                    className="absolute -bottom-10 left-1/2 -translate-x-1/2 px-2 py-1 rounded-md text-xs font-medium opacity-0 group-hover:opacity-100 transition bg-black text-white whitespace-nowrap shadow-lg"
+                  >
+                    {item.label}
+                  </div>
                 </motion.div>
               ))}
             </motion.div>
