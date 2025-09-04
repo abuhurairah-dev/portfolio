@@ -25,13 +25,26 @@ const particleData = [
   { left: '10%', top: '90%', delay: '3.9s', duration: '3.8s' },
 ];
 
+export function Background({ isDarkMode }: { isDarkMode: boolean }) {
+  return (
+    <div
+      className={clsx(
+        'absolute inset-0 -z-20',
+        isDarkMode
+          ? 'bg-gradient-to-b from-gray-900 via-gray-950 to-black'
+          : 'bg-gradient-to-b from-white via-gray-50 to-gray-100'
+      )}
+    />
+  );
+}
+
 export function NoiseOverlay() {
   return (
-    <div className="absolute inset-0 opacity-30 mix-blend-overlay pointer-events-none">
+    <div className="absolute inset-0 opacity-[0.05] mix-blend-soft-light pointer-events-none -z-10">
       <div
         className="w-full h-full"
         style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
         }}
       />
     </div>
@@ -40,13 +53,15 @@ export function NoiseOverlay() {
 
 export function FloatingParticles({ isDarkMode }: { isDarkMode: boolean }) {
   return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+    <div className="absolute inset-0 overflow-hidden pointer-events-none -z-10">
       {particleData.map((p, i) => (
         <div
           key={i}
           className={clsx(
-            'absolute w-1 h-1 rounded-full animate-float',
-            isDarkMode ? 'bg-blue-400/30' : 'bg-blue-600/20'
+            'absolute w-2 h-2 rounded-full animate-float blur-sm',
+            isDarkMode
+              ? 'bg-blue-400/40 shadow-[0_0_8px_2px_rgba(96,165,250,0.3)]'
+              : 'bg-blue-600/30 shadow-[0_0_6px_2px_rgba(37,99,235,0.2)]'
           )}
           style={{
             left: p.left,
