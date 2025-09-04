@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import MobileMenu from './MobileMenu';
 import Image from "next/image";
-import { Moon, Sun, Menu } from "lucide-react"; // cleaner icons
+import { Moon, Sun, Menu } from "lucide-react";
 
 interface NavItem {
   id: string;
@@ -181,13 +181,17 @@ function NavLinks({ navItems, activeItem, isDarkMode }: { navItems: NavItem[], a
   );
 }
 
-function ThemeToggle({ isDarkMode, onToggle }: { isDarkMode: boolean, onToggle: () => void }) {
+function ThemeToggle({ isDarkMode, onToggle }: { isDarkMode: boolean; onToggle: () => void }) {
   return (
     <button
       onClick={onToggle}
-      className="p-2 rounded-lg border border-gray-300 dark:border-white/20 hover:bg-gray-100 dark:hover:bg-white/10 transition"
+      className="px-3 py-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition text-lg"
     >
-      {isDarkMode ? <Sun size={18} /> : <Moon size={18} />}
+      {isDarkMode ? (
+        <Sun size={18} className="text-white-400" />
+      ) : (
+        <Moon size={18} className="text-gray-900" />
+      )}
     </button>
   );
 }
