@@ -6,6 +6,8 @@ import NavBar from '../../components/NavBar';
 import { NoiseOverlay, FloatingParticles } from '../../components/Particles';
 import { useTheme } from '../../hooks/useTheme';
 import { projects } from '@/data/projects';
+import CountUp from "react-countup";
+
 
 export default function Work() {
   const { isDarkMode, toggleTheme, isLoaded } = useTheme();
@@ -215,6 +217,59 @@ export default function Work() {
                 ))}
               </div>
             </section>
+
+            {/* Metrics / Achievements */}
+            <section className="mt-24">
+              <h2
+                className={`text-3xl font-bold mb-12 text-center ${
+                  isDarkMode ? "text-white" : "text-gray-900"
+                }`}
+              >
+                🚀 Achievements
+              </h2>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                {/* Metric 1 */}
+                <div className="p-6 rounded-2xl shadow-sm bg-white/10 backdrop-blur-sm border border-white/10">
+                  <h3 className={`text-4xl font-bold mb-2 ${isDarkMode ? "text-yellow-400" : "text-blue-600"}`}>
+                    <CountUp end={25} duration={3} />+
+                  </h3>
+                  <p className={isDarkMode ? "text-gray-300" : "text-gray-600"}>
+                    Projects Completed
+                  </p>
+                </div>
+
+                {/* Metric 2 */}
+                <div className="p-6 rounded-2xl shadow-sm bg-white/10 backdrop-blur-sm border border-white/10">
+                  <h3 className={`text-4xl font-bold mb-2 ${isDarkMode ? "text-yellow-400" : "text-blue-600"}`}>
+                    <CountUp end={10} duration={3} />+
+                  </h3>
+                  <p className={isDarkMode ? "text-gray-300" : "text-gray-600"}>
+                    Happy Clients
+                  </p>
+                </div>
+
+                {/* Metric 3 */}
+                <div className="p-6 rounded-2xl shadow-sm bg-white/10 backdrop-blur-sm border border-white/10">
+                  <h3 className={`text-4xl font-bold mb-2 ${isDarkMode ? "text-yellow-400" : "text-blue-600"}`}>
+                    <CountUp end={5} duration={3} />
+                  </h3>
+                  <p className={isDarkMode ? "text-gray-300" : "text-gray-600"}>
+                    Years Experience
+                  </p>
+                </div>
+
+                {/* Metric 4 */}
+                <div className="p-6 rounded-2xl shadow-sm bg-white/10 backdrop-blur-sm border border-white/10">
+                  <h3 className={`text-4xl font-bold mb-2 ${isDarkMode ? "text-yellow-400" : "text-blue-600"}`}>
+                    <CountUp end={15} duration={3} />+
+                  </h3>
+                  <p className={isDarkMode ? "text-gray-300" : "text-gray-600"}>
+                    Technologies Mastered
+                  </p>
+                </div>
+              </div>
+            </section>
+
           </div>
         </main>
       </div>
