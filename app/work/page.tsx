@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import NavBar from '../../components/NavBar';
 import { NoiseOverlay, FloatingParticles } from '../../components/Particles';
 import { useTheme } from '../../hooks/useTheme';
@@ -130,10 +131,14 @@ export default function Work() {
                 📂 {selectedCategory === "All" ? "All Projects" : selectedCategory + " Projects"}
               </h2>
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {filteredProjects.map((project) => (
-                  <div
+                {filteredProjects.map((project, index) => (
+                  <motion.div
                     key={project.id}
-                    className={`group relative p-6 rounded-2xl transition-all duration-500 hover:scale-[1.03] hover:shadow-xl ${
+                    initial={{ opacity: 0, y: 40 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1, duration: 0.6 }}
+                    whileHover={{ scale: 1.03, rotateX: 3, rotateY: -3 }}
+                    className={`group relative rounded-2xl overflow-hidden transition-all duration-500 ${
                       isDarkMode
                         ? "bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10"
                         : "bg-white shadow-sm border border-gray-200 hover:shadow-md"
@@ -141,51 +146,72 @@ export default function Work() {
                   >
                     {/* "New" badge for latest projects */}
                     {project.latest && (
-                      <span className="absolute top-4 right-4 bg-yellow-400 text-black text-xs font-bold px-2 py-1 rounded-full shadow-md">
+                      <span className="absolute top-4 right-4 bg-yellow-400 text-black text-xs font-bold px-2 py-1 rounded-full shadow-md z-20">
                         NEW
                       </span>
                     )}
 
-                    <div className="text-6xl mb-4 text-center">{project.image}</div>
-                    <h3
-                      className={`text-lg font-semibold mb-2 ${
-                        isDarkMode ? "text-white" : "text-gray-900"
-                      }`}
-                    >
-                      {project.title}
-                    </h3>
-                    <p
-                      className={`text-sm mb-4 ${
-                        isDarkMode ? "text-gray-300" : "text-gray-600"
-                      }`}
-                    >
-                      {project.description}
-                    </p>
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {project.technologies.map((tech) => (
-                        <span
-                          key={tech}
-                          className={`px-3 py-1 rounded-full text-xs font-medium ${
-                            isDarkMode
-                              ? "bg-white/10 text-gray-300"
-                              : "bg-gray-900/10 text-gray-600"
-                          }`}
-                        >
-                          {tech}
-                        </span>
-                      ))}
+                    {/* Thumbnail + Preview Overlay */}
+                    <div className="relative w-full h-48 overflow-hidden">
+                      <img
+                        src={project.thumbnail}
+                        alt={project.title}
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      />
+                      {project.preview && (
+                        <div className="absolute inset-0 bg-black/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                          <img
+                            src={project.preview}
+                            alt={`${project.title} preview`}
+                            className="max-h-full max-w-full object-contain rounded-lg shadow-lg"
+                          />
+                        </div>
+                      )}
                     </div>
-                    <a
-                      href={project.link}
-                      className={`inline-block w-full text-center py-2 rounded-lg font-medium transition-all duration-300 ${
-                        isDarkMode
-                          ? "bg-white/10 text-white hover:bg-white/20"
-                          : "bg-gray-900/10 text-gray-900 hover:bg-gray-900/20"
-                      }`}
-                    >
-                      View Project →
-                    </a>
-                  </div>
+
+                    {/* Card Content */}
+                    <div className="p-6">
+                      <h3
+                        className={`text-lg font-semibold mb-2 ${
+                          isDarkMode ? "text-white" : "text-gray-900"
+                        }`}
+                      >
+                        {project.title}
+                      </h3>
+                      <p
+                        className={`text-sm mb-4 ${
+                          isDarkMode ? "text-gray-300" : "text-gray-600"
+                        }`}
+                      >
+                        {project.description}
+                      </p>
+                      <div className="flex flex-wrap gap-2 mb-4">
+                        {project.technologies.map((tech) => (
+                          <span
+                            key={tech}
+                            className={`px-3 py-1 rounded-full text-xs font-medium ${
+                              isDarkMode
+                                ? "bg-white/10 text-gray-300"
+                                : "bg-gray-900/10 text-gray-600"
+                            }`}
+                          >
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                      <a
+                        href={project.link}
+                        target="_blank"
+                        className={`inline-block w-full text-center py-2 rounded-lg font-medium transition-all duration-300 ${
+                          isDarkMode
+                            ? "bg-white/10 text-white hover:bg-white/20"
+                            : "bg-gray-900/10 text-gray-900 hover:bg-gray-900/20"
+                        }`}
+                      >
+                        View Project →
+                      </a>
+                    </div>
+                  </motion.div>
                 ))}
               </div>
             </section>
