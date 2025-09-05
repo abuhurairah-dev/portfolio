@@ -219,56 +219,70 @@ export default function Work() {
             </section>
 
             {/* Metrics / Achievements */}
+            {/* Metrics / Achievements */}
             <section className="mt-24">
-              <h2
+              <motion.h2
+                initial={{ opacity: 0, y: -20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                viewport={{ once: true }}
                 className={`text-3xl font-bold mb-12 text-center ${
                   isDarkMode ? "text-white" : "text-gray-900"
                 }`}
               >
                 🚀 Achievements
-              </h2>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-                {/* Metric 1 */}
-                <div className="p-6 rounded-2xl shadow-sm bg-white/10 backdrop-blur-sm border border-white/10">
-                  <h3 className={`text-4xl font-bold mb-2 ${isDarkMode ? "text-yellow-400" : "text-blue-600"}`}>
-                    <CountUp end={25} duration={3} />+
-                  </h3>
-                  <p className={isDarkMode ? "text-gray-300" : "text-gray-600"}>
-                    Projects Completed
-                  </p>
-                </div>
+              </motion.h2>
 
-                {/* Metric 2 */}
-                <div className="p-6 rounded-2xl shadow-sm bg-white/10 backdrop-blur-sm border border-white/10">
-                  <h3 className={`text-4xl font-bold mb-2 ${isDarkMode ? "text-yellow-400" : "text-blue-600"}`}>
-                    <CountUp end={10} duration={3} />+
-                  </h3>
-                  <p className={isDarkMode ? "text-gray-300" : "text-gray-600"}>
-                    Happy Clients
-                  </p>
-                </div>
-
-                {/* Metric 3 */}
-                <div className="p-6 rounded-2xl shadow-sm bg-white/10 backdrop-blur-sm border border-white/10">
-                  <h3 className={`text-4xl font-bold mb-2 ${isDarkMode ? "text-yellow-400" : "text-blue-600"}`}>
-                    <CountUp end={5} duration={3} />
-                  </h3>
-                  <p className={isDarkMode ? "text-gray-300" : "text-gray-600"}>
-                    Years Experience
-                  </p>
-                </div>
-
-                {/* Metric 4 */}
-                <div className="p-6 rounded-2xl shadow-sm bg-white/10 backdrop-blur-sm border border-white/10">
-                  <h3 className={`text-4xl font-bold mb-2 ${isDarkMode ? "text-yellow-400" : "text-blue-600"}`}>
-                    <CountUp end={15} duration={3} />+
-                  </h3>
-                  <p className={isDarkMode ? "text-gray-300" : "text-gray-600"}>
-                    Technologies Mastered
-                  </p>
-                </div>
-              </div>
+              <motion.div
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true }}
+                variants={{
+                  hidden: {},
+                  show: {
+                    transition: { staggerChildren: 0.2 },
+                  },
+                }}
+                className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center"
+              >
+                {[
+                  { value: 25, suffix: "+", label: "Projects Completed" },
+                  { value: 10, suffix: "+", label: "Happy Clients" },
+                  { value: 5, suffix: "", label: "Years Experience" },
+                  { value: 15, suffix: "+", label: "Technologies Mastered" },
+                ].map((item, i) => (
+                  <motion.div
+                    key={i}
+                    variants={{
+                      hidden: { opacity: 0, y: 40 },
+                      show: {
+                        opacity: 1,
+                        y: 0,
+                        transition: { type: "spring", stiffness: 80, damping: 15 },
+                      },
+                    }}
+                    whileHover={{ scale: 1.05, y: -5 }}
+                    className={`p-6 rounded-2xl shadow-sm transition-all duration-500 cursor-default ${
+                      isDarkMode
+                        ? "bg-white/10 backdrop-blur-sm border border-white/10 hover:bg-white/20"
+                        : "bg-white border border-gray-200 hover:shadow-lg"
+                    }`}
+                  >
+                    <h3
+                      className={`text-4xl font-bold mb-2 ${
+                        isDarkMode ? "text-yellow-400" : "text-blue-600"
+                      }`}
+                    >
+                      <CountUp end={item.value} duration={3} />{item.suffix}
+                    </h3>
+                    <p className={isDarkMode ? "text-gray-300" : "text-gray-600"}>
+                      {item.label}
+                    </p>
+                  </motion.div>
+                ))}
+              </motion.div>
             </section>
+
 
           </div>
         </main>
