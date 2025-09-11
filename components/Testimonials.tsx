@@ -34,29 +34,32 @@ export default function Testimonials({ isDarkMode }: { isDarkMode: boolean }) {
         Testimonials
       </h2>
 
-      <div className="flex gap-8 overflow-x-auto snap-x snap-mandatory pb-6 scrollbar-hide">
-        {testimonials.map((t, i) => (
-          <motion.div
-            key={i}
-            whileHover={{ scale: 1.05 }}
-            className={`flex-shrink-0 w-80 snap-center rounded-2xl shadow-lg p-6 transition-colors duration-500 ${
-              isDarkMode ? "bg-gray-800 text-gray-200" : "bg-white text-gray-800"
-            }`}
-          >
-            <div className="flex items-center gap-4 mb-4">
-              <img
-                src={t.avatar}
-                alt={t.name}
-                className="w-12 h-12 rounded-full object-cover border"
-              />
-              <div>
-                <p className="font-semibold">{t.name}</p>
-                <p className="text-sm opacity-75">{t.role}</p>
+      {/* Centered container */}
+      <div className="flex justify-center">
+        <div className="flex gap-8 overflow-x-auto snap-x snap-mandatory pb-6 scrollbar-hide max-w-6xl justify-center">
+          {testimonials.map((t, i) => (
+            <motion.div
+              key={i}
+              whileHover={{ scale: 1.05 }}
+              className={`flex-shrink-0 w-80 snap-center rounded-2xl shadow-lg p-6 transition-colors duration-500 ${
+                isDarkMode ? "bg-gray-800 text-gray-200" : "bg-white text-gray-800"
+              }`}
+            >
+              <div className="flex items-center gap-4 mb-4">
+                <img
+                  src={t.avatar}
+                  alt={t.name}
+                  className="w-12 h-12 rounded-full object-cover border"
+                />
+                <div>
+                  <p className="font-semibold">{t.name}</p>
+                  <p className="text-sm opacity-75">{t.role}</p>
+                </div>
               </div>
-            </div>
-            <p className="leading-relaxed">“{t.text}”</p>
-          </motion.div>
-        ))}
+              <p className="leading-relaxed">“{t.text}”</p>
+            </motion.div>
+          ))}
+        </div>
       </div>
     </section>
   );
