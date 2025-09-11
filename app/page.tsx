@@ -9,6 +9,7 @@ import HireCard from '../components/HireCard';
 import { useTheme } from '../hooks/useTheme';
 import Footer from '@/components/Footer';
 import LatestWork from '@/components/LatestWork';
+import Testimonials from '@/components/Testimonials';
 import { Code, Github, Figma, Linkedin, Laptop, Database, Globe, Cpu } from "lucide-react";
 import Link from "next/link";
 import clsx from 'clsx';
@@ -200,6 +201,7 @@ export default function Home() {
         </div>
 
         <main>
+          <Testimonials isDarkMode={isDarkMode} />
           <HireCard isDarkMode={isDarkMode} />
         </main>
       </div>
