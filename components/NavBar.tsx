@@ -53,7 +53,7 @@ const navItems: NavItem[] = [
   { id: 'contact', label: 'Contact', href: '/contact', icon: icons.contact },
 ];
 
-const profileImage = "/avatar.png";
+const profileImage = "https://i.pravatar.cc/";
 
 interface NavigationProps {
   isDarkMode: boolean;
