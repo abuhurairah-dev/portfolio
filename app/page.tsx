@@ -10,6 +10,7 @@ import { useTheme } from '../hooks/useTheme';
 import Footer from '@/components/Footer';
 import LatestWork from '@/components/LatestWork';
 import Testimonials from '@/components/Testimonials';
+import Timeline from '@/components/Timeline';
 import { Code, Github, Figma, Linkedin, Laptop, Database, Globe, Cpu } from "lucide-react";
 import Link from "next/link";
 import clsx from 'clsx';
@@ -202,6 +203,7 @@ export default function Home() {
 
         <main>
           <Testimonials isDarkMode={isDarkMode} />
+          <Timeline isDarkMode={isDarkMode} />
           <HireCard isDarkMode={isDarkMode} />
         </main>
       </div>
